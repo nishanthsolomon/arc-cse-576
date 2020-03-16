@@ -1,15 +1,21 @@
 #!/bin/bash
 
-model_directory="./models"
-decomposable_attention_model="decomposable-attention-elmo-2018.02.19.tar.gz"
-decomposable_attention_model_path="${model_directory}/${decomposable_attention_model}"
-decomposable_attention_model_url="https://s3-us-west-2.amazonaws.com/allennlp/models/decomposable-attention-elmo-2018.02.19.tar.gz"
+CUR_DIR=`pwd`
 
-if [ -e $decomposable_attention_model_path ]
-then
-    echo "ok"
-else
-    mkdir -p -- "$model_directory"
-    cd $model_directory
-    wget $decomposable_attention_model_url
-fi
+while read line; do 
+    directory_to_save="$(echo $line | cut -d',' -f1)"
+    file_name="$(echo $line | cut -d',' -f2)"
+    download_url="$(echo $line | cut -d',' -f3)"
+    file_path=${directory_to_save}/${file_name}
+    cd $CUR_DIR
+    if [ -e $file_path ]
+    then
+        echo "${file_name} OK."
+    else
+        mkdir -p -- "$directory_to_save"
+        cd $directory_to_save
+        wget $download_url
+        echo "Downloaded ${file_name}"
+    fi
+
+done < downloadables.txt
