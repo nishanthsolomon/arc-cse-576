@@ -7,8 +7,7 @@ Repository for CSE 576 course project
 
 ## Downloadables
 
-Specify the required files that must be downloaded in downloadables.txt
-Each row specifies the directory to be stored, the name of the file, the download path seperated by ','.
+Specify the required files that must be downloaded in downloadables.txt. <br /> Each row specifies the directory to be stored, the name of the file, the download path seperated by ','.
 
 ## ElasticSearch and Kibana configuration
 
@@ -16,8 +15,8 @@ Installation: https://www.elastic.co/guide/en/elasticsearch/reference/current/in
 
 Run both Elasticsearch and Kibana locally: https://www.elastic.co/guide/en/elasticsearch/reference/current/starting-elasticsearch.html, https://www.elastic.co/guide/en/kibana/current/start-stop.html
 
-Download the ARC dataset (https://leaderboard.allenai.org/arc/submissions/get-started) and place the three files in the `./data` folder. Name them appropriately as per the script -- `train.jsonl`, `dev.jsonl`, `test.jsonl`.
+Download the ARC dataset (https://s3-us-west-2.amazonaws.com/ai2-website/data/ARC-V1-Feb2018.zip) and place the files in the `./dataset` folder. 
 
 ## indexer.py
 
-Ensure Elasticsearch is running. The script creates 3 indices in the elastic search node running locally -- `train_data`, `dev_data` and `test_data`. Use Kibana's dashboard or curl to query for the stored indices.
+Ensure Elasticsearch is running. The script creates 1 index in the elastic search node running locally -- `arc_corpus`. Use Kibana's dashboard or curl to query for the stored indices.
