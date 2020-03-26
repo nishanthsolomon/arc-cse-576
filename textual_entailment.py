@@ -30,5 +30,5 @@ class TextualEntailment():
 
         candidates = [candidate[0] for candidate in candidates]
 
-        candidates = candidates[:10]
+        candidates = candidates[:5]
         return candidates
