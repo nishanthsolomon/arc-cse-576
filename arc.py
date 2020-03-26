@@ -33,4 +33,4 @@ if __name__ == "__main__":
         numRows = int(sys.argv[2])
     accuracy = arc.analyse_dataset(path, numRows)
 
-    print("Reported accuracy = " + accuracy)
+    print("Reported accuracy = " + str(accuracy))
