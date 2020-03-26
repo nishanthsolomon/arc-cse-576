@@ -11,3 +11,10 @@ class Utilities:
 
         return b.tolist();
 
+    @staticmethod
+    def get_values_from_json_array(arr, key):
+        values = []
+        for key_val in arr:
+            values.append(key_val[key])
+        return values
+
