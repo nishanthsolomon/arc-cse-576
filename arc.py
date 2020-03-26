@@ -1,4 +1,5 @@
 import configparser
+import json
 from textual_entailment import TextualEntailment
 from elasticsearch_query import ElasticsearchQuery
 from transformers import XLNetTokenizer, XLNetForMultipleChoice
@@ -21,6 +22,18 @@ class ARC():
 
         return candidates
 
+    def analyze_arc_dataset(self, path):
+        with open(path) as f:
+            data = f.readlines()
+            for i, a in enumerate(data):
+                b = json.loads(a)
+                question = b['question']['stem']
+                choices = b['question']['choices']
+                answer_key = b['answerKey']
+                candidates = arc.get_candidates(question)
+                print(str(question) + '\n\n\n' + str(candidates) +
+                      '\n\n\n' + str(choices) + '\n\n\n' + str(answer_key))
+
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
@@ -35,3 +48,6 @@ if __name__ == "__main__":
 
     question = 'Clean and organize around the house.'
     candidates = arc.get_candidates(question)
+
+    arc.analyze_arc_dataset(
+        './dataset/ARC-V1-Feb2018/ARC-Challenge/ARC-Challenge-Test.jsonl')
