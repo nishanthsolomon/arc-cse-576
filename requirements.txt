@@ -1,2 +1,3 @@
 allennlp==0.9.0
 elasticsearch
+transformers==2.6.0
