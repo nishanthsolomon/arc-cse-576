@@ -1,7 +1,8 @@
 import configparser
-
 from textual_entailment import TextualEntailment
 from elasticsearch_query import ElasticsearchQuery
+from transformers import XLNetTokenizer, XLNetForMultipleChoice
+from answerPredictor import AnswerPredictor
 
 
 class ARC():
@@ -25,7 +26,12 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read('./arc_configuration.conf')
 
+    tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
+    model = XLNetForMultipleChoice.from_pretrained('xlnet-base-cased')
+
     arc = ARC(config)
+
+    predictor = AnswerPredictor(tokenizer, model)
 
     question = 'Clean and organize around the house.'
     candidates = arc.get_candidates(question)
