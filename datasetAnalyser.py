@@ -26,7 +26,7 @@ class DataAnalyzer:
         for fact in candidate_facts:
             input = []
             for choice in choices:
-                input.append(question + fact + choice)
+                input.append(question.rstrip() + fact.rstrip() + choice)
             classification_scores = self.predictor.predict_answer(input)
             scores = classification_scores[0].detach().numpy()
             index = np.argmax(scores)
