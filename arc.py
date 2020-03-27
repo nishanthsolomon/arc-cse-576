@@ -6,6 +6,7 @@ from transformers import XLNetTokenizer, XLNetForMultipleChoice
 from answerPredictor import AnswerPredictor
 from datasetAnalyser import DataAnalyzer
 
+
 class ARC():
     def __init__(self, config):
         textual_entailment_config = config['textual_entailment']
@@ -15,10 +16,12 @@ class ARC():
         tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
         model = XLNetForMultipleChoice.from_pretrained('xlnet-base-cased')
         predictor = AnswerPredictor(tokenizer, model)
-        self.dataset_analyzer = DataAnalyzer(textual_entailment, elasticsearch, predictor)
+        self.dataset_analyzer = DataAnalyzer(
+            textual_entailment, elasticsearch, predictor)
 
     def analyse_dataset(self, path, num_rows):
         return self.dataset_analyzer.analyze_arc_dataset(path, num_rows)
+
 
 if __name__ == "__main__":
     arguments = len(sys.argv) - 1
@@ -33,4 +36,4 @@ if __name__ == "__main__":
         numRows = int(sys.argv[2])
     accuracy = arc.analyse_dataset(path, numRows)
 
-    print("Reported accuracy = " + accuracy)
+    print("Reported accuracy = " + str(accuracy))
