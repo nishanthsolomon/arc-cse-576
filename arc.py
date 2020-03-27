@@ -1,39 +1,76 @@
 import configparser
 import sys
 from textual_entailment import TextualEntailment
-from elasticsearch_query import ElasticsearchQuery
-from transformers import XLNetTokenizer, XLNetForMultipleChoice
-from answerPredictor import AnswerPredictor
-from datasetAnalyser import DataAnalyzer
+from elasticsearch_utils import ElasticsearchUtils
+from xlnet_predictor import XlnetPredictor
+from utils import Utilities
+from arc_datasetreader import ArcDatasetReader
+from sklearn.metrics import accuracy_score
 
 
 class ARC():
     def __init__(self, config):
         textual_entailment_config = config['textual_entailment']
         elasticsearch_config = config['elasticsearch']
-        textual_entailment = TextualEntailment(textual_entailment_config)
-        elasticsearch = ElasticsearchQuery(elasticsearch_config)
-        tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased')
-        model = XLNetForMultipleChoice.from_pretrained('xlnet-base-cased')
-        predictor = AnswerPredictor(tokenizer, model)
-        self.dataset_analyzer = DataAnalyzer(
-            textual_entailment, elasticsearch, predictor)
+        xlnet_config = config['xlnet']
+        self.textual_entailment = TextualEntailment(textual_entailment_config)
+        self.elasticsearch = ElasticsearchUtils(elasticsearch_config)
+        self.xlnet = XlnetPredictor(xlnet_config)
+        self.arc_datasetreader = ArcDatasetReader()
 
-    def analyse_dataset(self, path, num_rows):
-        return self.dataset_analyzer.analyze_arc_dataset(path, num_rows)
+    def get_candidates(self, search_phrase):
+        elasticsearch_candidates = self.elasticsearch.shingles_request(
+            search_phrase)
+        textual_entailment_candidates = self.textual_entailment.get_entailment_candidate_list(
+            search_phrase, elasticsearch_candidates)
+
+        return textual_entailment_candidates
+
+    def get_prediction(self, question, choices):
+        candidates = self.get_candidates(question)
+        scores = []
+        for candidate in candidates:
+            input = []
+            for choice in choices:
+                input.append(
+                    ' '.join([candidate.strip(), question.strip(), choice.strip()]))
+            score = self.xlnet.predict_answer(input)[0].detach().numpy()
+            scores.append(score)
+        prediction = Utilities.get_prediction_mean(scores)
+        return prediction
+
+    def analyse_dataset(self, path, num_questions):
+
+        ground_truth = []
+        predictions = []
+        for question, choices, answer_key in self.arc_datasetreader.read_arc_dataset(path):
+            if num_questions == len(ground_truth):
+                break
+            ground_truth.append(answer_key)
+            prediction = self.get_prediction(question, choices)
+            predictions.append(prediction)
+            print('Question : ' + str(question) + '\nChoices : ' + str(choices) +
+                  '\nGround Truth : ' + str(answer_key) + '\nPredicted : ' + str(prediction) + '\n')
+
+        accuracy = accuracy_score(ground_truth, predictions)
+        return accuracy
 
 
 if __name__ == "__main__":
-    arguments = len(sys.argv) - 1
+    num_arguments = len(sys.argv) - 1
+
+    path = './dataset/ARC-V1-Feb2018/ARC-Challenge/ARC-Challenge-Test.jsonl'
+    num_rows = 20
+
+    if num_arguments > 0:
+        path = sys.argv[1]
+        if num_arguments > 1:
+            num_rows = int(sys.argv[2])
+
     config = configparser.ConfigParser()
     config.read('./arc_configuration.conf')
     arc = ARC(config)
-    # question = 'Clean and organize around the house.'
-    # candidates = arc.get_candidates(question)
-    path = sys.argv[1]
-    numRows = 5
-    if len(sys.argv) > 2:
-        numRows = int(sys.argv[2])
-    accuracy = arc.analyse_dataset(path, numRows)
+
+    accuracy = arc.analyse_dataset(path, num_rows)
 
     print("Reported accuracy = " + str(accuracy))
