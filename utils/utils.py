@@ -27,3 +27,10 @@ class Utilities:
         index = np.argmax(score)
 
         return Utilities.prediction_array[index]
+
+    @staticmethod
+    def get_prediction_max(scores):
+        scores = np.asarray(scores)
+        _, index = np.unravel_index(scores.argmax(), scores.shape)
+
+        return Utilities.prediction_array[index]

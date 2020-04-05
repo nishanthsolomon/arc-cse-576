@@ -35,7 +35,7 @@ class ARC():
                     ' '.join([candidate.strip(), question.strip(), choice.strip()]))
             score = self.xlnet.predict_answer(input)[0].detach().numpy()
             scores.append(score)
-        prediction = Utilities.get_prediction_mean(scores)
+        prediction = Utilities.get_prediction_max(scores)
         return prediction
 
     def analyse_dataset(self, path, num_questions):
