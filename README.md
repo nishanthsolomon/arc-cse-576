@@ -3,11 +3,11 @@ Repository for CSE 576 course project
 
 1. Install the required packages as in requirements.txt
 2. Run the installer.sh to download the required files.
-3. Run textual_entailment.py to check the entailment score.
+3. Run python main.py --path --num_rows to analyze the ARC Challenge test corpus.
 
-## Downloadables
+## Installer
 
-Specify the required files that must be downloaded in downloadables.txt. <br /> Each row specifies the directory to be stored, the name of the file, the download path seperated by ','.
+Run installer.sh to download the models and the dataset.
 
 ## ElasticSearch and Kibana configuration
 
@@ -19,4 +19,4 @@ Download the ARC dataset (https://s3-us-west-2.amazonaws.com/ai2-website/data/AR
 
 ## Indexing
 
-Ensure Elasticsearch is running. Use the curl requests in [elasticsearch.md](elasticsearch.md) to create the index. Run the script indexer.py, it creates 1 index in the elastic search node running locally -- `arc_corpus`. Use Kibana's dashboard or curl to query for the stored indices.
+Ensure Elasticsearch is running. Use the curl requests in [elasticsearch.md](./elasticsearch_utils/elasticsearch.md) to create the index. Run the script indexer.py, it creates 1 index in the elastic search node running locally -- `arc_corpus`. Use Kibana's dashboard or curl to query for the stored indices.

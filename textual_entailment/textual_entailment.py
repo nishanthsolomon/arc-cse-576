@@ -4,7 +4,7 @@ from allennlp.predictors.predictor import Predictor
 class TextualEntailment():
     def __init__(self, config):
         model_path = config['model_path']
-
+        self.num_candidates = int(config['num_candidates'])
         self.predictor = Predictor.from_path(model_path)
 
     def get_entailment_score(self, hypothesis, premise):
@@ -30,5 +30,5 @@ class TextualEntailment():
 
         candidates = [candidate[0] for candidate in candidates]
 
-        candidates = candidates[:5]
+        candidates = candidates[:self.num_candidates]
         return candidates
