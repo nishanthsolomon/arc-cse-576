@@ -57,7 +57,7 @@ class ElasticsearchUtils():
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
-    config.read('./arc_configuration.conf')
+    config.read('./arc/conf/arc_configuration.conf')
     elasticsearch_config = config['elasticsearch']
 
     elasticsearch_util = ElasticsearchUtils(elasticsearch_config)
