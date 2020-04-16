@@ -19,4 +19,4 @@ Download the ARC dataset (https://s3-us-west-2.amazonaws.com/ai2-website/data/AR
 
 ## Indexing
 
-Ensure Elasticsearch is running. Use the curl requests in [elasticsearch.md](./elasticsearch_utils/elasticsearch.md) to create the index. Run the script indexer.py, it creates 1 index in the elastic search node running locally -- `arc_corpus`. Use Kibana's dashboard or curl to query for the stored indices.
+Ensure Elasticsearch is running. Use the curl requests in [elasticsearch.md](./elasticsearch_utils/elasticsearch.md) to create the index. Run the script elasticsearch_utils/elasticsearch_utils.py, it creates 1 index in the elastic search node running locally -- `arc_corpus_shingle`. Use Kibana's dashboard or curl to query for the stored indices.
