@@ -26,7 +26,8 @@ class ARC():
         return textual_entailment_candidates
 
     def get_prediction(self, question, choices):
-        candidates = self.get_candidates(question)
+        search_phrase = question + ' ' + ' '.join(choices)
+        candidates = self.get_candidates(search_phrase)
         scores = []
         for candidate in candidates:
             input = []
