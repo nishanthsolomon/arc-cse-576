@@ -27,9 +27,10 @@ class TextualEntailment():
                 question, elasticsearch_candidate)
             candidates.append((elasticsearch_candidate, entailment_score))
 
-        sorted(candidates, key=lambda x: (-x[1]))
+        candidates = sorted(
+            candidates, key=lambda x: float(x[1]), reverse=True)
 
-        candidates = [candidate[0] for candidate in candidates]
+        candidates = [candidate[0]
+                      for candidate in candidates[:self.num_candidates]]
 
-        candidates = candidates[:self.num_candidates]
         return candidates
