@@ -52,6 +52,8 @@ class ElasticsearchUtils():
         for i in range(0, len(json["hits"]["hits"])):
             candidates.append(json["hits"]["hits"][i]["_source"]["data"])
 
+        candidates = list(set(candidates))
+
         return candidates
 
 
@@ -61,4 +63,4 @@ if __name__ == "__main__":
     elasticsearch_config = config['elasticsearch']
 
     elasticsearch_util = ElasticsearchUtils(elasticsearch_config)
-    elasticsearch_util.index_name()
+    elasticsearch_util.index_data()
