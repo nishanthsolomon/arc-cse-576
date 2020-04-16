@@ -8,13 +8,13 @@ from sklearn.metrics import accuracy_score
 
 
 class ARC():
-    def __init__(self, config):
+    def __init__(self, config, cuda_device=-1):
         textual_entailment_config = config['textual_entailment']
         elasticsearch_config = config['elasticsearch']
         xlnet_config = config['xlnet']
-        self.textual_entailment = TextualEntailment(textual_entailment_config)
+        self.textual_entailment = TextualEntailment(textual_entailment_config, cuda_device)
         self.elasticsearch = ElasticsearchUtils(elasticsearch_config)
-        self.xlnet = XlnetPredictor(xlnet_config)
+        self.xlnet = XlnetPredictor(xlnet_config, cuda_device)
         self.arc_datasetreader = ArcDatasetReader()
 
     def get_candidates(self, search_phrase):
@@ -34,7 +34,7 @@ class ARC():
             for choice in choices:
                 input.append(
                     ' '.join([candidate.strip(), question.strip(), choice.strip()]))
-            score = self.xlnet.predict_answer(input)[0].detach().numpy()
+            score = self.xlnet.predict_answer(input)[0].detach().cpu().numpy()
             scores.append(score)
         prediction = Utilities.get_prediction_max(scores)
         return prediction

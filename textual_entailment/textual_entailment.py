@@ -2,10 +2,11 @@ from allennlp.predictors.predictor import Predictor
 
 
 class TextualEntailment():
-    def __init__(self, config):
+    def __init__(self, config, cuda_device=-1):
         model_path = config['model_path']
         self.num_candidates = int(config['num_candidates'])
-        self.predictor = Predictor.from_path(model_path)
+        self.predictor = Predictor.from_path(
+            model_path, cuda_device=cuda_device)
 
     def get_entailment_score(self, hypothesis, premise):
         prediction = self.predictor.predict(
