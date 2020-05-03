@@ -9,7 +9,8 @@ class XlnetPredictor():
         model_path = config['model_path']
         self.tokenizer = XLNetTokenizer.from_pretrained(model_path)
         if (self.cuda_device):
-            self.model = XLNetForMultipleChoice.from_pretrained(model_path).to('cuda')
+            self.model = XLNetForMultipleChoice.from_pretrained(
+                model_path).to('cuda')
         else:
             self.model = XLNetForMultipleChoice.from_pretrained(model_path)
 
@@ -18,7 +19,7 @@ class XlnetPredictor():
         padded_choices = Utilities.pad_array(encoded_choices)
 
         input_ids = torch.tensor(padded_choices).unsqueeze(0)
-        labels = torch.tensor(3).unsqueeze(0)
+        labels = torch.tensor(1).unsqueeze(0)
 
         if (self.cuda_device):
             input_ids = input_ids.to('cuda')
