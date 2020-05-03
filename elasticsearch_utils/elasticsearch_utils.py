@@ -2,6 +2,7 @@ import requests
 import json
 import configparser
 from elasticsearch import Elasticsearch, helpers
+from utils.utils import Utilities
 
 
 class ElasticsearchUtils():
@@ -38,7 +39,7 @@ class ElasticsearchUtils():
 
     def shingles_request(self, question):
 
-        question = question.encode("ascii", "ignore").decode("utf-8", "ignore")
+        question = Utilities.clean_elasticsearch(question)
         data = ElasticsearchUtils.DATA_FORMAT.format(
             self.num_candidates, question, question)
 

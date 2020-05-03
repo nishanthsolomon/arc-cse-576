@@ -48,6 +48,10 @@ class ARC():
         for question, choices, answer_key in self.arc_datasetreader.read_arc_dataset(path):
             if (num_questions == len(ground_truth)):
                 break
+            if (len(choices) < 4):
+                continue
+            if answer_key in Utilities.nums:
+                answer_key = Utilities.prediction_array[int(answer_key) - 1]
             ground_truth.append(answer_key)
             candidates, prediction = self.get_prediction(question, choices)
             predictions.append(prediction)

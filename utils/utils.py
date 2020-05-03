@@ -2,6 +2,7 @@ import numpy as np
 
 
 class Utilities:
+    nums = ['1', '2', '3', '4']
     prediction_array = ['A', 'B', 'C', 'D']
     @staticmethod
     def pad_array(encoded_choides):
@@ -34,3 +35,10 @@ class Utilities:
         _, index = np.unravel_index(scores.argmax(), scores.shape)
 
         return Utilities.prediction_array[index]
+
+    @staticmethod
+    def clean_elasticsearch(search_query):
+        search_query = search_query.encode(
+            "ascii", "ignore").decode("utf-8", "ignore")
+        search_query = search_query.replace('"', ' ')
+        search_query = search_query.replace('\\', '')
