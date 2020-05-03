@@ -42,3 +42,4 @@ class Utilities:
             "ascii", "ignore").decode("utf-8", "ignore")
         search_query = search_query.replace('"', ' ')
         search_query = search_query.replace('\\', '')
+        return search_query
